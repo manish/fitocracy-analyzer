@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System.Threading;
 using System.Globalization;
@@ -54,11 +55,11 @@ namespace Cassini.FitocracyAnalyzer.Core
 				submitButton.Click ();
 
 				Thread.Sleep (1000);
-				driver.Navigate().GoToUrl("http://www.fitocracy.com/profile/");
-
+				driver.Navigate().GoToUrl(fitocracyProfilePage);
 
 				var imgElement = driver.FindElementByXPath ("//input[@name='profile_user']");
 				userId = imgElement.GetAttribute ("value");
+
 
 				var indexer = 0;
 				while(true) {
@@ -74,38 +75,44 @@ namespace Cassini.FitocracyAnalyzer.Core
 					var workouts = driver.FindElementsByXPath ("//div[@data-ag-type='workout']");
 					indexer += 15;
 					Console.WriteLine (indexer + ":" +workouts.Count);
+					foreach (var workout in workouts) {
+						var workoutData = workout.Text;
+						var tagName = workout.TagName;
+
+						var actionPrompts = workout.FindElements (By.XPath (".//div[@class='action_prompt']"));
+						var prompts = actionPrompts.Select (x => x.Text).ToList ();
+					}
 
 					var levelUps = driver.FindElementsByXPath ("//div[@data-ag-type='levelup']");
 					foreach (var levelUp in levelUps)
-						HandleLevelUp (levelUp.Text);
+						HandleLevelUp (levelUp);
 				}
 			}
 		}
 
-		protected void HandleLevelUp (string levelUpData)
+		protected void HandleLevelUp (IWebElement levelUp)
 		{
-			string[] levelUpSplit = levelUpData.Split (new [] { '\n' });
+			var levelRaw = levelUp.FindElement (
+				By.XPath (".//div[@class='dramatic-description']")).Text;
+			var dateRaw = levelUp.FindElement (
+				By.XPath (".//a[@class='action_time gray_link']")).Text;
 
-			string dateRaw = levelUpSplit [1];
-			string levelRaw = levelUpSplit [3];
-			string propsRaw = levelUpSplit [7];
+			var propsRaw = levelUp.FindElement (By.XPath (".//span[@class='prop-list']"));
+			var propsListRaw = propsRaw.FindElements(
+				By.XPath (".//span")).Select (x => x.Text.Replace(",","")).ToList ();
 
 			string levelStr = levelRaw.Split (new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries) [1];
 			int level = Convert.ToInt32 (levelStr);
 
+
 			DateTime dateTime = DateTime.ParseExact (dateRaw, "s", CultureInfo.InvariantCulture);
 
-			var proppedStr = propsRaw.Contains ("others") ? propsRaw.Split (
-				new [] { "others propped this." }, StringSplitOptions.RemoveEmptyEntries) [1] : propsRaw;
-			proppedStr = proppedStr.Replace ("propped this.", "");
-
-			var props = proppedStr.Split (new [] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList ();
-
-			var levelUp = new LevelUp (level, dateTime, props);
+			var levelUpInst = new LevelUp (level, dateTime, propsListRaw);
 
 			if (LevelUps != null)
-				LevelUps (this, new LevelUpEventArgs (levelUp));
+				LevelUps (this, new LevelUpEventArgs (levelUpInst));
 		}
 	}
 }
+
 
