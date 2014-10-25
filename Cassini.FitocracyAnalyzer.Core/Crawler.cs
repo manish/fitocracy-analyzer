@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
+
 using OpenQA.Selenium.Firefox;
 using System.Threading;
+using System.Globalization;
 
 namespace Cassini.FitocracyAnalyzer.Core
 {
@@ -17,6 +20,10 @@ namespace Cassini.FitocracyAnalyzer.Core
 		readonly string passwd;
 
 		string userId;
+
+		public event EventHandler<LevelUpEventArgs> LevelUps;
+
+		public event EventHandler<WorkoutEventArgs> Workouts;
 
 		public Crawler (string username, string password)
 		{
@@ -49,6 +56,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 				Thread.Sleep (1000);
 				driver.Navigate().GoToUrl("http://www.fitocracy.com/profile/");
 
+
 				var imgElement = driver.FindElementByXPath ("//input[@name='profile_user']");
 				userId = imgElement.GetAttribute ("value");
 
@@ -66,8 +74,37 @@ namespace Cassini.FitocracyAnalyzer.Core
 					var workouts = driver.FindElementsByXPath ("//div[@data-ag-type='workout']");
 					indexer += 15;
 					Console.WriteLine (indexer + ":" +workouts.Count);
+
+					var levelUps = driver.FindElementsByXPath ("//div[@data-ag-type='levelup']");
+					foreach (var levelUp in levelUps)
+						HandleLevelUp (levelUp.Text);
 				}
 			}
+		}
+
+		protected void HandleLevelUp (string levelUpData)
+		{
+			string[] levelUpSplit = levelUpData.Split (new [] { '\n' });
+
+			string dateRaw = levelUpSplit [1];
+			string levelRaw = levelUpSplit [3];
+			string propsRaw = levelUpSplit [7];
+
+			string levelStr = levelRaw.Split (new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries) [1];
+			int level = Convert.ToInt32 (levelStr);
+
+			DateTime dateTime = DateTime.ParseExact (dateRaw, "s", CultureInfo.InvariantCulture);
+
+			var proppedStr = propsRaw.Contains ("others") ? propsRaw.Split (
+				new [] { "others propped this." }, StringSplitOptions.RemoveEmptyEntries) [1] : propsRaw;
+			proppedStr = proppedStr.Replace ("propped this.", "");
+
+			var props = proppedStr.Split (new [] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList ();
+
+			var levelUp = new LevelUp (level, dateTime, props);
+
+			if (LevelUps != null)
+				LevelUps (this, new LevelUpEventArgs (levelUp));
 		}
 	}
 }

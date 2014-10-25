@@ -71,6 +71,10 @@ namespace Cassini.FitocracyAnalyzer.CLI
 			} while (key.Key != ConsoleKey.Enter);
 
 			Crawler crawler = new Crawler (username, password);
+			crawler.LevelUps += (sender, e) => {
+				Console.WriteLine ("Level: {0}, DateTime: {1}, Props: {2}",
+					e.LevelUp.Level, e.LevelUp.Date, e.LevelUp.Props.Count);
+			};
 			crawler.Crawl ();
 		}
 
