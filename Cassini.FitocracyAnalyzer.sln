@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassini.FitocracyAnalyzer.CLI", "Cassini.FitocracyAnalyzer.CLI\Cassini.FitocracyAnalyzer.CLI.csproj", "{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassini.FitocracyAnalyzer.Core", "Cassini.FitocracyAnalyzer.Core\Cassini.FitocracyAnalyzer.Core.csproj", "{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Debug|x86.ActiveCfg = Debug|x86
+		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Debug|x86.Build.0 = Debug|x86
+		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Release|x86.ActiveCfg = Release|x86
+		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Release|x86.Build.0 = Release|x86
+		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Debug|x86.Build.0 = Debug|Any CPU
+		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Cassini.FitocracyAnalyzer.CLI\Cassini.FitocracyAnalyzer.CLI.csproj
+	EndGlobalSection
+EndGlobal
