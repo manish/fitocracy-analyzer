@@ -60,7 +60,6 @@ namespace Cassini.FitocracyAnalyzer.Core
 				var imgElement = driver.FindElementByXPath ("//input[@name='profile_user']");
 				userId = imgElement.GetAttribute ("value");
 
-
 				var indexer = 0;
 				while(true) {
 					Thread.Sleep (2000);
@@ -80,7 +79,11 @@ namespace Cassini.FitocracyAnalyzer.Core
 						var tagName = workout.TagName;
 
 						var actionPrompts = workout.FindElements (By.XPath (".//div[@class='action_prompt']"));
-						var prompts = actionPrompts.Select (x => x.Text).ToList ();
+						foreach (var action in actionPrompts) {
+							if (!action.Text.StartsWith ("Group", StringComparison.OrdinalIgnoreCase)) {
+								string name = action.Text;
+							}
+						}
 					}
 
 					var levelUps = driver.FindElementsByXPath ("//div[@data-ag-type='levelup']");
