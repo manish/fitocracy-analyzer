@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System.Threading;
 using System.Globalization;
+using Cassini.FitocracyAnalyzer.Core.Types;
 
 namespace Cassini.FitocracyAnalyzer.Core
 {

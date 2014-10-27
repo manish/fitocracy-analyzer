@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cassini.FitocracyAnalyzer.Core
+namespace Cassini.FitocracyAnalyzer.Core.Types
 {
 	public class LevelUp
 	{

@@ -42,6 +42,7 @@
     <Compile Include="WorkoutFactory.cs" />
     <Compile Include="Exercises.cs" />
     <Compile Include="ExerciseListCrawler.cs" />
+    <Compile Include="Types\Exercise.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
