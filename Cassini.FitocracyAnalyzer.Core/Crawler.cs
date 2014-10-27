@@ -6,6 +6,7 @@ using OpenQA.Selenium.Firefox;
 using System.Threading;
 using System.Globalization;
 using Cassini.FitocracyAnalyzer.Core.Types;
+using System.Text.RegularExpressions;
 
 namespace Cassini.FitocracyAnalyzer.Core
 {
@@ -63,6 +64,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 
 				var indexer = 0;
 				while(true) {
+
 					Thread.Sleep (2000);
 					var firstUrl = string.Format ("https://www.fitocracy.com/activity_stream/{0}/?user_id={1}",
 						indexer, userId);
@@ -73,25 +75,46 @@ namespace Cassini.FitocracyAnalyzer.Core
 						return;
 
 					var workouts = driver.FindElementsByXPath ("//div[@data-ag-type='workout']");
-					indexer += 15;
-					Console.WriteLine (indexer + ":" +workouts.Count);
-					foreach (var workout in workouts) {
-						var workoutData = workout.Text;
-						var tagName = workout.TagName;
-
-						var actionPrompts = workout.FindElements (By.XPath (".//div[@class='action_prompt']"));
-						foreach (var action in actionPrompts) {
-							if (!action.Text.StartsWith ("Group", StringComparison.OrdinalIgnoreCase)) {
-								string name = action.Text;
-							}
-						}
-					}
+					foreach (var workout in workouts)
+						HandleWorkout (workout);
 
 					var levelUps = driver.FindElementsByXPath ("//div[@data-ag-type='levelup']");
 					foreach (var levelUp in levelUps)
 						HandleLevelUp (levelUp);
+
+					indexer += 15;
 				}
 			}
+		}
+
+		protected void HandleWorkout (IWebElement workout)
+		{
+			var work = new Workout ();
+
+			var workoutHeader = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/span[@class='stream-type']"));
+			work.WorkoutName = workoutHeader.Text.Replace ("tracked", "").Replace ("for", "").Trim ();
+
+			var workoutPoints = workoutHeader.FindElement (By.XPath (".//span[@class='stream_total_points']")).Text;
+			work.TotalPoints = Convert.ToInt32 (workoutPoints.Replace ("pts", string.Empty).Replace(",",""));
+
+			var workoutDateTime = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/a[@class='action_time gray_link']"));
+			work.DateTime = DateTime.ParseExact (workoutDateTime.Text, "s", CultureInfo.InvariantCulture);
+
+			var actionDetail = workout.FindElement (By.XPath (".//ul[@class='action_detail']"));
+			var lis = actionDetail.FindElements (By.XPath ("li"));
+			foreach (var li in lis) {
+				var liName = li.FindElement (By.ClassName ("action_prompt")).Text;
+				if (liName.StartsWith ("Group", StringComparison.OrdinalIgnoreCase)) {
+					var subLis = li.FindElements (By.XPath ("div/div/ul/li"));
+					foreach (var subLi in subLis)
+						WorkoutFactory.GetExercise (li);
+				} else {
+					WorkoutFactory.GetExercise (li);
+				}
+			}
+
+			if (Workouts != null)
+				Workouts (this, new WorkoutEventArgs (work));
 		}
 
 		protected void HandleLevelUp (IWebElement levelUp)

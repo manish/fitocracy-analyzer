@@ -72,8 +72,14 @@ namespace Cassini.FitocracyAnalyzer.CLI
 
 			Crawler crawler = new Crawler (username, password);
 			crawler.LevelUps += (sender, e) => {
+				var lu = e.LevelUp;
 				Console.WriteLine ("Level: {0}, DateTime: {1}, Props: {2}",
-					e.LevelUp.Level, e.LevelUp.Date, e.LevelUp.Props.Count);
+					lu.Level, lu.Date, lu.Props.Count);
+			};
+			crawler.Workouts += (sender, e) =>  {
+				var wo = e.Workout;
+				Console.WriteLine ("DateTime: {0} | TotalPoints {1} | Name: {2} | Total exercises: {3}",
+					wo.DateTime, wo.TotalPoints, wo.WorkoutName, wo.Exercises.Count);
 			};
 			crawler.Crawl ();
 		}

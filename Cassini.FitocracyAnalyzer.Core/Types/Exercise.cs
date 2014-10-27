@@ -48,9 +48,9 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 
 		public TimeSpan? Time { get; set; }
 
-		public int? Distance { get; set; }
+		public string Distance { get; set; }
 
-		public IntensityKind Intensity { get; set; }
+		public IntensityKind? Intensity { get; set; }
 	}
 
 	public enum IntensityKind
