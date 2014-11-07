@@ -18,8 +18,7 @@ namespace Cassini.FitocracyAnalyzer.CLI
 
 		public static void Main (string[] args)
 		{
-			new Cassini.FitocracyAnalyzer.Fetcher.MyClass (null, null);
-			/*var show_help = false;
+			var show_help = false;
 			string username = null, password = "";
 			ConsoleKeyInfo key;
 
@@ -71,7 +70,9 @@ namespace Cassini.FitocracyAnalyzer.CLI
 				}
 			} while (key.Key != ConsoleKey.Enter);
 
-			Crawler crawler = new Crawler (username, password);
+			new Cassini.FitocracyAnalyzer.Fetcher.FirocracyLogin (username, password);
+
+			/*Crawler crawler = new Crawler (username, password);
 			crawler.LevelUps += (sender, e) => {
 				var lu = e.LevelUp;
 				Console.WriteLine ("Level: {0}, DateTime: {1}, Props: {2}",
@@ -81,8 +82,8 @@ namespace Cassini.FitocracyAnalyzer.CLI
 				var wo = e.Workout;
 				Console.WriteLine ("DateTime: {0} | TotalPoints {1} | Name: {2} | Total exercises: {3}",
 					wo.DateTime, wo.TotalPoints, wo.WorkoutName, wo.Exercises.Count);
-			};
-			crawler.Crawl ();*/
+			};*/
+			//crawler.Crawl ();
 		}
 
 		static void ShowError (string message = null)
