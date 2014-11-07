@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassini.FitocracyAnalyzer.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassini.FitocracyAnalyzer.Core", "Cassini.FitocracyAnalyzer.Core\Cassini.FitocracyAnalyzer.Core.csproj", "{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassini.FitocracyAnalyzer.Fetcher", "Cassini.FitocracyAnalyzer.Fetcher\Cassini.FitocracyAnalyzer.Fetcher.csproj", "{647CFAA9-1D20-402D-A3CE-84E094B27D40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Debug|x86.Build.0 = Debug|x86
 		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Release|x86.ActiveCfg = Release|x86
 		{3D63BCA5-65EE-4814-BDF0-EA4B95F82CE4}.Release|x86.Build.0 = Release|x86
+		{647CFAA9-1D20-402D-A3CE-84E094B27D40}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{647CFAA9-1D20-402D-A3CE-84E094B27D40}.Debug|x86.Build.0 = Debug|Any CPU
+		{647CFAA9-1D20-402D-A3CE-84E094B27D40}.Release|x86.ActiveCfg = Release|Any CPU
+		{647CFAA9-1D20-402D-A3CE-84E094B27D40}.Release|x86.Build.0 = Release|Any CPU
 		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Debug|x86.Build.0 = Debug|Any CPU
 		{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}.Release|x86.ActiveCfg = Release|Any CPU

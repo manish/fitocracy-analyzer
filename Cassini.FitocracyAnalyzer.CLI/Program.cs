@@ -18,7 +18,8 @@ namespace Cassini.FitocracyAnalyzer.CLI
 
 		public static void Main (string[] args)
 		{
-			var show_help = false;
+			new Cassini.FitocracyAnalyzer.Fetcher.MyClass (null, null);
+			/*var show_help = false;
 			string username = null, password = "";
 			ConsoleKeyInfo key;
 
@@ -81,7 +82,7 @@ namespace Cassini.FitocracyAnalyzer.CLI
 				Console.WriteLine ("DateTime: {0} | TotalPoints {1} | Name: {2} | Total exercises: {3}",
 					wo.DateTime, wo.TotalPoints, wo.WorkoutName, wo.Exercises.Count);
 			};
-			crawler.Crawl ();
+			crawler.Crawl ();*/
 		}
 
 		static void ShowError (string message = null)

@@ -23,7 +23,7 @@
         <Variable name="MONO_IOMAP" value="all" />
       </EnvironmentVariables>
     </EnvironmentVariables>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>full</DebugType>
@@ -54,6 +54,10 @@
     <ProjectReference Include="..\Cassini.FitocracyAnalyzer.Core\Cassini.FitocracyAnalyzer.Core.csproj">
       <Project>{BBFE6D62-088A-4295-A4AC-35D9C12DCD6D}</Project>
       <Name>Cassini.FitocracyAnalyzer.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cassini.FitocracyAnalyzer.Fetcher\Cassini.FitocracyAnalyzer.Fetcher.csproj">
+      <Project>{647CFAA9-1D20-402D-A3CE-84E094B27D40}</Project>
+      <Name>Cassini.FitocracyAnalyzer.Fetcher</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
