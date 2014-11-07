@@ -35,6 +35,7 @@
     <Compile Include="WebUtils.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FirocracyLogin.cs" />
+    <Compile Include="FitocracyHttpClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

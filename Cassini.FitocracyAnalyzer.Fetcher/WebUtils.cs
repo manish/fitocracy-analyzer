@@ -3,12 +3,13 @@ using System.Net.Http;
 using System.Linq;
 using System.Net;
 using System;
+using System.Net.Http.Headers;
 
 namespace Cassini.FitocracyAnalyzer.Fetcher
 {
 	public static class WebUtils
 	{
-		public static async Task<Tuple<string,CookieContainer>> GetCsrfTokenAsync () 
+		public static async Task<Tuple<string,CookieContainer>> GetCsrfTokenAsync ()
 		{
 			var cookieJar = new CookieContainer();
 			var handler = new HttpClientHandler
