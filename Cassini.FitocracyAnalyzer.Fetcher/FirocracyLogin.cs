@@ -5,6 +5,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Cassini.FitocracyAnalyzer.Fetcher
 {
@@ -27,6 +28,7 @@ namespace Cassini.FitocracyAnalyzer.Fetcher
 			CookieContainer = csrftokenCookieTuple.Item2;
 
 			using (var client = new FitocracyHttpClient (CookieContainer)) {
+				client.AddDefaultHeaders ();
 				var content = new FormUrlEncodedContent(new [] 
 					{
 						new KeyValuePair<string, string>("username", username),
@@ -42,19 +44,12 @@ namespace Cassini.FitocracyAnalyzer.Fetcher
 					throw new WebException (string.Format (
 						"Login failed for user '{0}' with status {1}", username, result.StatusCode));
 
-				/*var webReq = WebRequest.CreateHttp (Constants.FitocracyRequestUrl);
-				webReq.CookieContainer = CookieContainer;
-				var task = Task.Factory.FromAsync(
-					(cb, o) => ((HttpWebRequest)o).BeginGetResponse(cb, o),
-					res => ((HttpWebRequest)res.AsyncState).EndGetResponse(res), webReq);
-				var rest = task.Result;
-				var stream = rest.GetResponseStream ();
-				using (var readStream = new StreamReader (stream)) {
-					var x =  readStream.ReadToEnd ();
-				}*/
+				var home = client.GetAsync ("https://www.fitocracy.com/profile/m4n1sh/?feed").Result;
+				var header = result.Content.Headers.GetValues("X-Fitocracy-User").FirstOrDefault();
 			}
 		}
 	}
+
 }
 
 

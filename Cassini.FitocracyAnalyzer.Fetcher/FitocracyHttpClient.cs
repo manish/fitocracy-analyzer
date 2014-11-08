@@ -13,6 +13,10 @@ namespace Cassini.FitocracyAnalyzer.Fetcher
 				UseDefaultCredentials = false
 			} as HttpMessageHandler)
 		{
+		}
+
+		public void AddDefaultHeaders ()
+		{
 			DefaultRequestHeaders.Add ("Accept", @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 			DefaultRequestHeaders.Add ("Accept-Encoding", @"gzip,deflate,sdch");
 			DefaultRequestHeaders.Add ("Accept-Language", @"en-US,en;q=0.8");
