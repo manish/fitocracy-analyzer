@@ -26,6 +26,8 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 
 		public int Points { get; set; }
 
+		public TimeSpan TimeTaken { get; set; }
+
 		public WeightSet WeightData { get; set; }
 
 		public DistanceSet DistanceData { get; set; }

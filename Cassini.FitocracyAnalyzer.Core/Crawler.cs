@@ -107,9 +107,9 @@ namespace Cassini.FitocracyAnalyzer.Core
 				if (liName.StartsWith ("Group", StringComparison.OrdinalIgnoreCase)) {
 					var subLis = li.FindElements (By.XPath ("div/div/ul/li"));
 					foreach (var subLi in subLis)
-						WorkoutFactory.GetExercise (li);
+						work.Exercises.Add (WorkoutFactory.GetExercise (subLi));
 				} else {
-					WorkoutFactory.GetExercise (li);
+					work.Exercises.Add (WorkoutFactory.GetExercise (li));
 				}
 			}
 

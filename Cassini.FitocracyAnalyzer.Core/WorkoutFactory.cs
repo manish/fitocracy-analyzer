@@ -12,13 +12,87 @@ namespace Cassini.FitocracyAnalyzer.Core
 		{
 			var exerciseName = exercise.FindElement (By.ClassName ("action_prompt")).Text;
 			var sets = exercise.FindElements (By.XPath ("ul/li"));
-
+			Console.WriteLine (exerciseName);
 			switch (exerciseName) {
 			case "Hiking":
 				return GetHikingExercise (sets);
+			case "Stretching":
+				return GetStretchingExercise (sets);
+			case "Push-Up":
+				return GetPushUpExercise (sets);
+			case "Barbell Bench Press":
+				return GetBarbellBenchPress (sets);
 			}
 
 			return null;
+		}
+
+		static Exercise GetBarbellBenchPress (ReadOnlyCollection<IWebElement> sets)
+		{
+			var exercise = new Exercise { ExerciseKind = Exercises.BarbellBenchPress };
+			foreach (var set in sets) {
+
+				var notes = set.GetAttribute ("stream_note");
+				if (notes != null) {
+					exercise.Notes = notes;
+					continue;
+				}
+
+				try {
+					var pointsAndData = GetPointsAndRepData (set);
+					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
+					setObj.WeightData = new WeightSet ();
+					var weightInfo = pointsAndData.Item2.Split (new [] {" x "}, StringSplitOptions.RemoveEmptyEntries);
+					setObj.WeightData.Weight = ParseWeight (weightInfo [0]);
+					setObj.WeightData.Reps = ParseReps (weightInfo [1]);
+					exercise.Sets.Add (setObj);
+				} catch (NoSuchElementException) {
+				}
+			}
+			return exercise;
+		}
+
+		static Exercise GetPushUpExercise (ReadOnlyCollection<IWebElement> sets)
+		{
+			var exercise = new Exercise { ExerciseKind = Exercises.PushUp };
+			foreach (var set in sets) {
+				var notes = set.GetAttribute ("stream_note");
+				if (notes != null) {
+					exercise.Notes = notes;
+					continue;
+				}
+
+				try {
+					var pointsAndData = GetPointsAndRepData (set);
+					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
+					setObj.WeightData = new WeightSet ();
+					setObj.WeightData.Reps = ParseReps (pointsAndData.Item2);
+					exercise.Sets.Add (setObj);
+				} catch (NoSuchElementException) {
+				}
+			}
+			return exercise;
+		}
+
+		static Exercise GetStretchingExercise (ReadOnlyCollection<IWebElement> sets)
+		{
+			var exercise = new Exercise { ExerciseKind = Exercises.Stretching };
+			foreach (var set in sets) {
+				var notes = set.GetAttribute ("stream_note");
+				if (notes != null) {
+					exercise.Notes = notes;
+					continue;
+				}
+
+				try {
+					var pointsAndData = GetPointsAndRepData (set);
+					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
+					setObj.TimeTaken = TimeSpan.Parse (pointsAndData.Item2);
+					exercise.Sets.Add (setObj);
+				} catch (NoSuchElementException) {
+				};
+			}
+			return exercise;
 		}
 
 		static Exercise GetHikingExercise (ReadOnlyCollection<IWebElement> sets)
@@ -48,6 +122,15 @@ namespace Cassini.FitocracyAnalyzer.Core
 			return exercise;
 		}
 
+		static int ParseReps (string repData)
+		{
+			return int.Parse (repData.Replace ("reps", string.Empty));
+		}
+
+		static int ParseWeight (string weightData)
+		{
+			return int.Parse (weightData.Replace ("lb", string.Empty));
+		}
 
 		static Tuple<int, string> GetPointsAndRepData (IWebElement set)
 		{
