@@ -23,11 +23,11 @@ namespace Cassini.FitocracyAnalyzer.Fetcher
 
 		public FirocracyLogin (string username, string password)
 		{
-			var csrftokenCookieTuple = WebUtils.GetCsrfTokenAsync ().Result;
+			/*var csrftokenCookieTuple = WebUtils.GetCsrfTokenAsync ().Result;
 			CsrfToken = csrftokenCookieTuple.Item1;
-			CookieContainer = csrftokenCookieTuple.Item2;
+			CookieContainer = csrftokenCookieTuple.Item2;*/
 
-			using (var client = new FitocracyHttpClient (CookieContainer)) {
+			/*using (var client = new FitocracyHttpClient (CookieContainer)) {
 				client.AddDefaultHeaders ();
 				var content = new FormUrlEncodedContent(new [] 
 					{
@@ -39,13 +39,18 @@ namespace Cassini.FitocracyAnalyzer.Fetcher
 						new KeyValuePair<string, string>("is_username", "1"),
 					});
 				var result = client.PostAsync(Constants.FitocracyRequestUrl, content).Result;
-
+				var cookieCollection = CookieContainer.GetCookies (new Uri (Constants.FitocracyRequestUrl));
 				if (result.StatusCode != HttpStatusCode.OK)
 					throw new WebException (string.Format (
 						"Login failed for user '{0}' with status {1}", username, result.StatusCode));
 
 				var home = client.GetAsync ("https://www.fitocracy.com/profile/m4n1sh/?feed").Result;
 				var header = result.Content.Headers.GetValues("X-Fitocracy-User").FirstOrDefault();
+			}*/
+
+			using (var client = new HttpClient ()) {
+				var response = client.GetAsync ("https://www.reddit.com/").Result;
+				var data = response.Content.ReadAsStringAsync ().Result;
 			}
 		}
 	}

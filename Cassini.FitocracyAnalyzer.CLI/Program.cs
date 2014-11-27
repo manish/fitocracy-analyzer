@@ -70,20 +70,18 @@ namespace Cassini.FitocracyAnalyzer.CLI
 				}
 			} while (key.Key != ConsoleKey.Enter);
 
-			new Cassini.FitocracyAnalyzer.Fetcher.FirocracyLogin (username, password);
-
-			/*Crawler crawler = new Crawler (username, password);
+			Crawler crawler = new Crawler (username, password);
 			crawler.LevelUps += (sender, e) => {
 				var lu = e.LevelUp;
 				Console.WriteLine ("Level: {0}, DateTime: {1}, Props: {2}",
 					lu.Level, lu.Date, lu.Props.Count);
 			};
-			crawler.Workouts += (sender, e) =>  {
+			crawler.Workouts += (sender, e) => {
 				var wo = e.Workout;
 				Console.WriteLine ("DateTime: {0} | TotalPoints {1} | Name: {2} | Total exercises: {3}",
 					wo.DateTime, wo.TotalPoints, wo.WorkoutName, wo.Exercises.Count);
-			};*/
-			//crawler.Crawl ();
+			};
+			crawler.Crawl ();
 		}
 
 		static void ShowError (string message = null)
