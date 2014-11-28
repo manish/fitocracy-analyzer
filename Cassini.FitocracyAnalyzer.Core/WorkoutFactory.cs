@@ -18,23 +18,28 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.Hiking, HikingParser);
 			case "Stretching":
 				return GetExerciseData (sets, Exercises.Stretching, TimeTakenParser);
+
+			#region CHEST WORKOUTS
 			case "Push-Up":
 				return GetExerciseData (sets, Exercises.PushUp, RepsParser);
-
 			case "Barbell Bench Press":
 				return GetExerciseData (sets, Exercises.BarbellBenchPress, WeightRepsParser);
 			case "Dumbbell Bench Press":
 				return GetExerciseData (sets, Exercises.DumbbellBenchPress, WeightRepsParser);
 			case "Cable Crossover":
 				return GetExerciseData (sets, Exercises.CableCrossover, WeightRepsParser);
+			#endregion
 
+			#region TRICEPS WORKOUTS
 			case "Triceps Pushdown":
 				return GetExerciseData (sets, Exercises.TricepsPushdown, WeightRepsParser);
 			case "Lying Barbell Triceps Extension":
 				return GetExerciseData (sets, Exercises.LyingBarbellTricepsExtension, WeightRepsParser);
 			case "Cable Rope Overhead Triceps Extension":
 				return GetExerciseData (sets, Exercises.CableRopeOverheadTricepsExtension, WeightRepsParser);
+			#endregion
 
+			#region ABS
 			case "Weighted Russian Twist":
 				return GetExerciseData (sets, Exercises.WeightedRussianTwist, WeightRepsParser);
 			case "Plank":
@@ -43,7 +48,9 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.HangingKneeRaise, RepsParser);
 			case "Weighted Decline Sit-Up":
 				return GetExerciseData (sets, Exercises.WeightedDeclineSitUp, WeightRepsParser);
+			#endregion
 
+			#region LEGS
 			case "Barbell Squat":
 				return GetExerciseData (sets, Exercises.BarbellSquat, WeightRepsParser);
 			case "Barbell Deadlift":
@@ -54,19 +61,34 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.BarbellHipThrust, WeightRepsParser);
 			case "Calf Press On The Leg Press Machine":
 				return GetExerciseData (sets, Exercises.CalfPressOnTheLegPressMachine, WeightRepsParser);
+			#endregion
 
+			#region SHOULDER
 			case "Standing Barbell Shoulder Press (OHP)":
 				return GetExerciseData (sets, Exercises.StandingBarbellShoulderPressOHP, WeightRepsParser);
 			case "Standing Dumbbell Shoulder Press":
 				return GetExerciseData (sets, Exercises.StandingDumbbellShoulderPress, WeightRepsParser);
 			case "Dumbbell Side Lateral Raise":
 				return GetExerciseData (sets, Exercises.DumbbellSideLateralRaise, WeightRepsParser);
+			#endregion
+
+			#region BACK AND LATS
 			case "Seated Cable Row":
 				return GetExerciseData (sets, Exercises.SeatedCableRow, WeightRepsParser);
 			case "T-Bar Row":
 				return GetExerciseData (sets, Exercises.TBarRow, WeightRepsParser);
 			case "Pendlay Row":
 				return GetExerciseData (sets, Exercises.PendlayRow, WeightRepsParser);
+			#endregion
+
+			#region BICEPS
+			case "Dumbbell Bicep Curl":
+				return GetExerciseData (sets, Exercises.DumbbellBicepCurl, WeightRepsParser);
+			case "Hammer Dumbbell Curl":
+				return GetExerciseData (sets, Exercises.HammerDumbbellCurl, WeightRepsParser);
+			case "Barbell Curl":
+				return GetExerciseData (sets, Exercises.BarbellCurl, WeightRepsParser);
+			#endregion
 			}
 
 			return null;
