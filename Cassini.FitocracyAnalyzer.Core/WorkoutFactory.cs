@@ -17,9 +17,9 @@ namespace Cassini.FitocracyAnalyzer.Core
 			case "Hiking":
 				return GetExerciseData (sets, Exercises.Hiking, HikingParser);
 			case "Stretching":
-				return GetExerciseData (sets, Exercises.Stretching, StretchingParser);
+				return GetExerciseData (sets, Exercises.Stretching, TimeTakenParser);
 			case "Push-Up":
-				return GetExerciseData (sets, Exercises.PushUp, PushUpParser);
+				return GetExerciseData (sets, Exercises.PushUp, RepsParser);
 			case "Barbell Bench Press":
 				return GetExerciseData (sets, Exercises.BarbellBenchPress, WeightRepsParser);
 			case "Dumbbell Bench Press":
@@ -32,6 +32,14 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.LyingBarbellTricepsExtension, WeightRepsParser);
 			case "Cable Rope Overhead Triceps Extension":
 				return GetExerciseData (sets, Exercises.CableRopeOverheadTricepsExtension, WeightRepsParser);
+			case "Weighted Russian Twist":
+				return GetExerciseData (sets, Exercises.WeightedRussianTwist, WeightRepsParser);
+			case "Plank":
+				return GetExerciseData (sets, Exercises.Plank, TimeTakenParser);
+			case "Hanging Knee Raise":
+				return GetExerciseData (sets, Exercises.HangingKneeRaise, RepsParser);
+			case "Weighted Decline Sit-Up":
+				return GetExerciseData (sets, Exercises.WeightedDeclineSitUp, WeightRepsParser);
 			}
 
 			return null;
@@ -52,7 +60,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 			};
 		}
 
-		static ExerciseSet PushUpParser (IWebElement set)
+		static ExerciseSet RepsParser (IWebElement set)
 		{
 			var pointsAndData = GetPointsAndRepData (set);
 			return new ExerciseSet {
@@ -64,7 +72,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 			};
 		}
 
-		static ExerciseSet StretchingParser (IWebElement set)
+		static ExerciseSet TimeTakenParser (IWebElement set)
 		{
 			var pointsAndData = GetPointsAndRepData (set);
 			return new ExerciseSet {

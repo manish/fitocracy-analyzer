@@ -5,6 +5,8 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 {
 	public class Workout
 	{
+		public long Id { get; set; }
+
 		public DateTime DateTime { get; set; }
 
 		public List<Exercise> Exercises { get; set; }

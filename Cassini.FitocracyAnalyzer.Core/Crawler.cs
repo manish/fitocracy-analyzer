@@ -92,13 +92,18 @@ namespace Cassini.FitocracyAnalyzer.Core
 			var work = new Workout ();
 
 			var workoutHeader = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/span[@class='stream-type']"));
-			work.WorkoutName = workoutHeader.Text.Replace ("tracked", "").Replace ("for", "").Trim ();
+			var forIndex = workoutHeader.Text.IndexOf ("for", StringComparison.InvariantCultureIgnoreCase);
+			work.WorkoutName = workoutHeader.Text.Remove (forIndex).Replace ("tracked", string.Empty).Trim ();
 
 			var workoutPoints = workoutHeader.FindElement (By.XPath (".//span[@class='stream_total_points']")).Text;
 			work.TotalPoints = Convert.ToInt32 (workoutPoints.Replace ("pts", string.Empty).Replace(",",""));
 
 			var workoutDateTime = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/a[@class='action_time gray_link']"));
 			work.DateTime = DateTime.ParseExact (workoutDateTime.Text, "s", CultureInfo.InvariantCulture);
+
+			var workoutIdNode = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/a[@class='collapse-stream-item chevron-icon tiny-vertical dark up']"));
+			var workoutId = workoutIdNode.GetAttribute ("data-item-id");
+			work.Id = Convert.ToInt64 (workoutId);
 
 			var actionDetail = workout.FindElement (By.XPath (".//ul[@class='action_detail']"));
 			var lis = actionDetail.FindElements (By.XPath ("li"));
