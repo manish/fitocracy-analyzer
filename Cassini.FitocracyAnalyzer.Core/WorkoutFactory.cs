@@ -26,6 +26,12 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.DumbbellBenchPress, WeightRepsParser);
 			case "Cable Crossover":
 				return GetExerciseData (sets, Exercises.CableCrossover, WeightRepsParser);
+			case "Triceps Pushdown":
+				return GetExerciseData (sets, Exercises.TricepsPushdown, WeightRepsParser);
+			case "Lying Barbell Triceps Extension":
+				return GetExerciseData (sets, Exercises.LyingBarbellTricepsExtension, WeightRepsParser);
+			case "Cable Rope Overhead Triceps Extension":
+				return GetExerciseData (sets, Exercises.CableRopeOverheadTricepsExtension, WeightRepsParser);
 			}
 
 			return null;
@@ -109,9 +115,9 @@ namespace Cassini.FitocracyAnalyzer.Core
 			return int.Parse (repData.Replace ("reps", string.Empty));
 		}
 
-		static int ParseWeight (string weightData)
+		static double ParseWeight (string weightData)
 		{
-			return int.Parse (weightData.Replace ("lb", string.Empty));
+			return double.Parse (weightData.Replace ("lb", string.Empty));
 		}
 
 		static RawRep GetPointsAndRepData (IWebElement set)
@@ -119,7 +125,9 @@ namespace Cassini.FitocracyAnalyzer.Core
 			string pointsStr = set.FindElement (By.ClassName ("action_prompt_points")).Text;
 			int points = Convert.ToInt32 (pointsStr);
 
-			string repText = set.Text.Replace (pointsStr, "");
+			int lastIndex = set.Text.LastIndexOf (pointsStr, StringComparison.OrdinalIgnoreCase);
+			string repText = set.Text.Remove (lastIndex);
+
 			bool isPr = repText.Contains ("PR");
 			repText = repText.Replace ("(PR)", string.Empty);
 

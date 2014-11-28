@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace Cassini.FitocracyAnalyzer.Core
 {
+
 	public enum Exercises
 	{
 		[Description("2-Arm Dumbbell Preacher Curl")]
