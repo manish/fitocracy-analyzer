@@ -92,6 +92,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.SeatedCalfRaise, WeightRepsParser);
 			case "Calf Press On The Leg Press Machine":
 				return GetExerciseData (sets, Exercises.CalfPressOnTheLegPressMachine, WeightRepsParser);
+			case "Standing Calf Raise":
+				return GetExerciseData (sets, Exercises.StandingCalfRaise, WeightedAssistedParser);
 			#endregion
 
 			#region SHOULDER
@@ -120,6 +122,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.WideGripLatPulldown, WeightRepsParser);
 			case "Lat Pulldown":
 				return GetExerciseData (sets, Exercises.LatPulldown, WeightRepsParser);
+			case "Pull-Up":
+				return GetExerciseData (sets, Exercises.PullUp, WeightedAssistedParser);
 			#endregion
 
 			#region BICEPS
@@ -135,6 +139,28 @@ namespace Cassini.FitocracyAnalyzer.Core
 			}
 
 			return null;
+		}
+
+		static ExerciseSet WeightedAssistedParser (IWebElement set)
+		{
+			var pointsAndData = GetPointsAndRepData (set);
+			var weightInfo = pointsAndData.RepData.Split (new [] {" | "}, StringSplitOptions.RemoveEmptyEntries);
+
+			int weightKind = weightInfo.Length > 1 && string.Equals (weightInfo [1], "assisted") ? -1 : 1;
+			double? weight = null;
+			if (weightInfo.Length > 2)
+				weight = ParseWeight (weightInfo [2]) * weightKind;
+			int? reps = null;
+			if (weightInfo.Length > 0)
+				reps = ParseReps (weightInfo [0]);
+			return new ExerciseSet {
+				Points = pointsAndData.Points,
+				WeightData = new WeightSet {
+					Reps = reps,
+					Weight = weight,
+				},
+				IsPr = pointsAndData.IsPr
+			};
 		}
 
 		static ExerciseSet EllipticalParser (IWebElement set)
