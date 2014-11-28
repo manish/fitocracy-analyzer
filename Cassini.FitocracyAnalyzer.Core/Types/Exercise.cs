@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Cassini.FitocracyAnalyzer.Core.Types
 {
@@ -11,10 +13,13 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 			Sets = new List<ExerciseSet> ();
 		}
 
+		[JsonProperty("exercise_kind")]
 		public Exercises ExerciseKind { get; set; }
 
+		[JsonProperty("sets")]
 		public List<ExerciseSet> Sets { get; set; }
 
+		[JsonProperty("notes")]
 		public string Notes { get; set; }
 
 		public string RawData { get; set; }
@@ -27,14 +32,19 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 
 	public class ExerciseSet
 	{
+		[JsonProperty("points")]
 		public int Points { get; set; }
 
+		[JsonProperty("time_taken")]
 		public TimeSpan? TimeTaken { get; set; }
 
+		[JsonProperty("weight_data")]
 		public WeightSet WeightData { get; set; }
 
+		[JsonProperty("distance_data")]
 		public DistanceSet DistanceData { get; set; }
 
+		[JsonProperty("is_pr")]
 		public bool IsPr { get; set; }
 
 		public override string ToString ()
@@ -46,10 +56,14 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 
 	public class WeightSet
 	{
+		[JsonProperty("weight")]
 		public double? Weight { get; set; }
 
+		[JsonProperty("reps")]
 		public int? Reps { get; set; }
 
+		[JsonProperty("plank_kind")]
+		[JsonConverter(typeof(StringEnumConverter))]
 		public PlankKind? PlankKind { get; set; }
 
 		public override string ToString ()
@@ -60,16 +74,23 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 
 	public class DistanceSet
 	{
+		[JsonProperty("time")]
 		public TimeSpan? Time { get; set; }
 
+		[JsonProperty("distance")]
 		public string Distance { get; set; }
 
+		[JsonProperty("intensity")]
+		[JsonConverter(typeof(StringEnumConverter))]
 		public IntensityKind? Intensity { get; set; }
 
+		[JsonProperty("speed")]
 		public string Speed { get; set; }
 
+		[JsonProperty("heart_rate")]
 		public int? HeartRate { get; set; }
 
+		[JsonProperty("resistance")]
 		public string Resistance { get; set; }
 
 		public override string ToString ()

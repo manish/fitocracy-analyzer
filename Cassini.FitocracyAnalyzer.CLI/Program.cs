@@ -71,6 +71,7 @@ namespace Cassini.FitocracyAnalyzer.CLI
 			} while (key.Key != ConsoleKey.Enter);
 
 			Crawler crawler = new Crawler (username, password);
+			var io = new FitocracyIO ();
 			crawler.LevelUps += (sender, e) => {
 				var lu = e.LevelUp;
 				Console.WriteLine ("Level: {0}, DateTime: {1}, Props: {2}",
@@ -78,9 +79,11 @@ namespace Cassini.FitocracyAnalyzer.CLI
 			};
 			crawler.Workouts += (sender, e) => {
 				var wo = e.Workout;
+				io.SaveWorkout (wo);
 				Console.WriteLine ("DateTime: {0} | TotalPoints {1} | Name: {2} | Total exercises: {3}",
 					wo.DateTime, wo.TotalPoints, wo.WorkoutName, wo.Exercises.Count);
 			};
+
 			var before = DateTime.Now;
 			crawler.Crawl (before);
 		}
