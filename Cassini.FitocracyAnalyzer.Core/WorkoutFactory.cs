@@ -57,8 +57,14 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.BarbellDeadlift, WeightRepsParser);
 			case "Leg Press":
 				return GetExerciseData (sets, Exercises.LegPress, WeightRepsParser);
+			case "Leg Extensions":
+				return GetExerciseData (sets, Exercises.LegExtensions, WeightRepsParser);
+			case "Lying Leg Curls":
+				return GetExerciseData (sets, Exercises.LyingLegCurls, WeightRepsParser);
 			case "Barbell Hip Thrust":
 				return GetExerciseData (sets, Exercises.BarbellHipThrust, WeightRepsParser);
+			case "Standing Barbell Calf Raise":
+				return GetExerciseData (sets, Exercises.StandingBarbellCalfRaise, WeightRepsParser);
 			case "Calf Press On The Leg Press Machine":
 				return GetExerciseData (sets, Exercises.CalfPressOnTheLegPressMachine, WeightRepsParser);
 			#endregion
