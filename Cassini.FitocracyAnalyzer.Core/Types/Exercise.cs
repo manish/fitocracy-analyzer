@@ -18,41 +18,58 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 		public string Notes { get; set; }
 
 		public string RawData { get; set; }
+
+		public override string ToString ()
+		{
+			return ExerciseKind.ToString ("G");
+		}
 	}
 
 	public class ExerciseSet
 	{
-		public ExerciseSet () { }
-
 		public int Points { get; set; }
 
-		public TimeSpan TimeTaken { get; set; }
+		public TimeSpan? TimeTaken { get; set; }
 
 		public WeightSet WeightData { get; set; }
 
 		public DistanceSet DistanceData { get; set; }
+
+		public bool IsPr { get; set; }
+
+		public override string ToString ()
+		{
+			return string.Format ("[ExerciseSet: Points={0}, TimeTaken={1}, WeightData={2}, DistanceData={3}, IsPr={4}]",
+				Points, TimeTaken, WeightData, DistanceData, IsPr);
+		}
 	}
 
 	public class WeightSet
 	{
-		public WeightSet () { }
-
 		public double? Weight { get; set; }
 
 		public int? Reps { get; set; }
 
 		public PlankKind? PlankKind { get; set; }
+
+		public override string ToString ()
+		{
+			return string.Format ("[WeightSet: Weight={0}, Reps={1}, PlankKind={2}]", Weight, Reps, PlankKind);
+		}
 	}
 
 	public class DistanceSet
 	{
-		public DistanceSet () { }
-
 		public TimeSpan? Time { get; set; }
 
 		public string Distance { get; set; }
 
 		public IntensityKind? Intensity { get; set; }
+
+		public override string ToString ()
+		{
+			return string.Format ("[DistanceSet: Time={0}, Distance={1}, Intensity={2}]", Time, Distance, Intensity);
+		}
 	}
 
 	public enum IntensityKind

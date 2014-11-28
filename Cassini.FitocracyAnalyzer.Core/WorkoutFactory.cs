@@ -12,93 +12,80 @@ namespace Cassini.FitocracyAnalyzer.Core
 		{
 			var exerciseName = exercise.FindElement (By.ClassName ("action_prompt")).Text;
 			var sets = exercise.FindElements (By.XPath ("ul/li"));
-			Console.WriteLine (exerciseName);
+
 			switch (exerciseName) {
 			case "Hiking":
-				return GetHikingExercise (sets);
+				return GetExerciseData (sets, Exercises.Hiking, HikingParser);
 			case "Stretching":
-				return GetStretchingExercise (sets);
+				return GetExerciseData (sets, Exercises.Stretching, StretchingParser);
 			case "Push-Up":
-				return GetPushUpExercise (sets);
+				return GetExerciseData (sets, Exercises.PushUp, PushUpParser);
 			case "Barbell Bench Press":
-				return GetBarbellBenchPress (sets);
+				return GetExerciseData (sets, Exercises.BarbellBenchPress, BarbellBenchPressParser);
 			}
 
 			return null;
 		}
 
-		static Exercise GetBarbellBenchPress (ReadOnlyCollection<IWebElement> sets)
+		static ExerciseSet BarbellBenchPressParser (IWebElement set)
 		{
-			var exercise = new Exercise { ExerciseKind = Exercises.BarbellBenchPress };
-			foreach (var set in sets) {
+			var pointsAndData = GetPointsAndRepData (set);
+			var weightInfo = pointsAndData.RepData.Split (new [] {" x "}, StringSplitOptions.RemoveEmptyEntries);
 
-				var notes = set.GetAttribute ("stream_note");
-				if (notes != null) {
-					exercise.Notes = notes;
-					continue;
-				}
-
-				try {
-					var pointsAndData = GetPointsAndRepData (set);
-					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
-					setObj.WeightData = new WeightSet ();
-					var weightInfo = pointsAndData.Item2.Split (new [] {" x "}, StringSplitOptions.RemoveEmptyEntries);
-					setObj.WeightData.Weight = ParseWeight (weightInfo [0]);
-					setObj.WeightData.Reps = ParseReps (weightInfo [1]);
-					exercise.Sets.Add (setObj);
-				} catch (NoSuchElementException) {
-				}
-			}
-			return exercise;
+			return new ExerciseSet {
+				Points = pointsAndData.Points,
+				WeightData = new WeightSet {
+					Weight = ParseWeight (weightInfo [0]),
+					Reps = ParseReps (weightInfo [1])
+				},
+				IsPr = pointsAndData.IsPr
+			};
 		}
 
-		static Exercise GetPushUpExercise (ReadOnlyCollection<IWebElement> sets)
+		static ExerciseSet PushUpParser (IWebElement set)
 		{
-			var exercise = new Exercise { ExerciseKind = Exercises.PushUp };
-			foreach (var set in sets) {
-				var notes = set.GetAttribute ("stream_note");
-				if (notes != null) {
-					exercise.Notes = notes;
-					continue;
-				}
-
-				try {
-					var pointsAndData = GetPointsAndRepData (set);
-					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
-					setObj.WeightData = new WeightSet ();
-					setObj.WeightData.Reps = ParseReps (pointsAndData.Item2);
-					exercise.Sets.Add (setObj);
-				} catch (NoSuchElementException) {
-				}
-			}
-			return exercise;
+			var pointsAndData = GetPointsAndRepData (set);
+			return new ExerciseSet {
+				Points = pointsAndData.Points,
+				WeightData = new WeightSet {
+					Reps = ParseReps (pointsAndData.RepData)
+				},
+				IsPr = pointsAndData.IsPr
+			};
 		}
 
-		static Exercise GetStretchingExercise (ReadOnlyCollection<IWebElement> sets)
+		static ExerciseSet StretchingParser (IWebElement set)
 		{
-			var exercise = new Exercise { ExerciseKind = Exercises.Stretching };
-			foreach (var set in sets) {
-				var notes = set.GetAttribute ("stream_note");
-				if (notes != null) {
-					exercise.Notes = notes;
-					continue;
-				}
-
-				try {
-					var pointsAndData = GetPointsAndRepData (set);
-					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
-					setObj.TimeTaken = TimeSpan.Parse (pointsAndData.Item2);
-					exercise.Sets.Add (setObj);
-				} catch (NoSuchElementException) {
-				};
-			}
-			return exercise;
+			var pointsAndData = GetPointsAndRepData (set);
+			return new ExerciseSet {
+				Points = pointsAndData.Points,
+				TimeTaken = TimeSpan.ParseExact(pointsAndData.RepData, 
+					"c", CultureInfo.CurrentCulture),
+				IsPr = pointsAndData.IsPr
+			};
 		}
 
-		static Exercise GetHikingExercise (ReadOnlyCollection<IWebElement> sets)
+		static ExerciseSet HikingParser (IWebElement set)
 		{
-			var exercise = new Exercise { ExerciseKind = Exercises.Hiking };
+			var pointsAndData = GetPointsAndRepData (set);
+			var hikeData = pointsAndData.RepData.Split (new [] { '|' });
+
+			return new ExerciseSet {
+				Points = pointsAndData.Points,
+				DistanceData = new DistanceSet {
+					Time = TimeSpan.ParseExact(hikeData [0], 
+						"c", CultureInfo.CurrentCulture),
+					Distance = hikeData [1]
+				},
+				IsPr = pointsAndData.IsPr
+			};
+		}
+
+		static Exercise GetExerciseData (ReadOnlyCollection<IWebElement> sets, Exercises kind, Func<IWebElement, ExerciseSet> func)
+		{
+			var exercise = new Exercise { ExerciseKind = kind };
 			foreach (var set in sets) {
+
 				var notes = set.GetAttribute ("stream_note");
 				if (notes != null) {
 					exercise.Notes = notes;
@@ -106,19 +93,10 @@ namespace Cassini.FitocracyAnalyzer.Core
 				}
 
 				try {
-					var pointsAndData = GetPointsAndRepData (set);
-					var setObj = new ExerciseSet { Points = pointsAndData.Item1 };
-
-					setObj.DistanceData = new DistanceSet ();
-					var hikeData = pointsAndData.Item2.Split (new [] { '|' });
-					setObj.DistanceData.Time = TimeSpan.ParseExact(hikeData [0], 
-						"c", CultureInfo.CurrentCulture);
-					setObj.DistanceData.Distance = hikeData [1];
-					exercise.Sets.Add (setObj);
+					exercise.Sets.Add (func (set));
 				} catch (NoSuchElementException) {
-				};
+				}
 			}
-
 			return exercise;
 		}
 
@@ -132,14 +110,20 @@ namespace Cassini.FitocracyAnalyzer.Core
 			return int.Parse (weightData.Replace ("lb", string.Empty));
 		}
 
-		static Tuple<int, string> GetPointsAndRepData (IWebElement set)
+		static RawRep GetPointsAndRepData (IWebElement set)
 		{
-			string setData = set.Text;
 			string pointsStr = set.FindElement (By.ClassName ("action_prompt_points")).Text;
-			string repText = set.Text.Replace (pointsStr, "");
 			int points = Convert.ToInt32 (pointsStr);
 
-			return new Tuple<int, string> (points, repText);
+			string repText = set.Text.Replace (pointsStr, "");
+			bool isPr = repText.Contains ("PR");
+			repText = repText.Replace ("(PR)", string.Empty);
+
+			return new RawRep {
+				Points = points,
+				RepData = repText,
+				IsPr = isPr
+			};
 		}
 	}
 }

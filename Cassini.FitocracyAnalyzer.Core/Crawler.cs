@@ -120,6 +120,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 		protected void HandleLevelUp (IWebElement levelUp)
 		{
 			var levelRaw = levelUp.FindElement (
+
 				By.XPath (".//div[@class='dramatic-description']")).Text;
 			var dateRaw = levelUp.FindElement (
 				By.XPath (".//a[@class='action_time gray_link']")).Text;
