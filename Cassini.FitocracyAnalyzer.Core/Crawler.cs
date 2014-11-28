@@ -37,7 +37,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 			firefoxProfile.SetPreference("browser.download.folderList",2);
 		}
 
-		public void Crawl ()
+		public void Crawl (DateTime before)
 		{
 			using (var driver = new FirefoxDriver (firefoxBinary, firefoxProfile)) {
 				driver.Manage ().Timeouts ().SetPageLoadTimeout (new TimeSpan (0, 0, 30));
@@ -76,7 +76,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 
 					var workouts = driver.FindElementsByXPath ("//div[@data-ag-type='workout']");
 					foreach (var workout in workouts)
-						HandleWorkout (workout);
+						HandleWorkout (workout, before);
 
 					var levelUps = driver.FindElementsByXPath ("//div[@data-ag-type='levelup']");
 					foreach (var levelUp in levelUps)
@@ -87,9 +87,14 @@ namespace Cassini.FitocracyAnalyzer.Core
 			}
 		}
 
-		protected void HandleWorkout (IWebElement workout)
+		protected void HandleWorkout (IWebElement workout, DateTime before)
 		{
 			var work = new Workout ();
+
+			var workoutDateTime = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/a[@class='action_time gray_link']"));
+			work.DateTime = DateTime.ParseExact (workoutDateTime.Text, "s", CultureInfo.InvariantCulture);
+			if (work.DateTime > before)
+				return;
 
 			var workoutHeader = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/span[@class='stream-type']"));
 			var forIndex = workoutHeader.Text.IndexOf ("for", StringComparison.InvariantCultureIgnoreCase);
@@ -97,9 +102,6 @@ namespace Cassini.FitocracyAnalyzer.Core
 
 			var workoutPoints = workoutHeader.FindElement (By.XPath (".//span[@class='stream_total_points']")).Text;
 			work.TotalPoints = Convert.ToInt32 (workoutPoints.Replace ("pts", string.Empty).Replace(",",""));
-
-			var workoutDateTime = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/a[@class='action_time gray_link']"));
-			work.DateTime = DateTime.ParseExact (workoutDateTime.Text, "s", CultureInfo.InvariantCulture);
 
 			var workoutIdNode = workout.FindElement (By.XPath (".//div[@class='stream-item-headline']/a[@class='collapse-stream-item chevron-icon tiny-vertical dark up']"));
 			var workoutId = workoutIdNode.GetAttribute ("data-item-id");
