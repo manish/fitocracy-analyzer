@@ -112,6 +112,12 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.PendlayRow, WeightRepsParser);
 			case "One-Arm Dumbbell Row":
 				return GetExerciseData (sets, Exercises.OneArmDumbbellRow, WeightRepsParser);
+			case "Bent Over Barbell Row":
+				return GetExerciseData (sets, Exercises.BentOverBarbellRow, WeightRepsParser);
+			case "Wide-Grip Lat Pulldown":
+				return GetExerciseData (sets, Exercises.WideGripLatPulldown, WeightRepsParser);
+			case "Lat Pulldown":
+				return GetExerciseData (sets, Exercises.LatPulldown, WeightRepsParser);
 			#endregion
 
 			#region BICEPS
