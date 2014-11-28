@@ -105,6 +105,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.SeatedDumbbellShoulderPress, WeightRepsParser);
 			case "Dumbbell Side Lateral Raise":
 				return GetExerciseData (sets, Exercises.DumbbellSideLateralRaise, WeightRepsParser);
+			case "Front Dumbbell Raise":
+				return GetExerciseData (sets, Exercises.FrontDumbbellRaise, WeightRepsParser);
 			#endregion
 
 			#region BACK AND LATS
@@ -153,6 +155,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 			int? reps = null;
 			if (weightInfo.Length > 0)
 				reps = ParseReps (weightInfo [0]);
+
 			return new ExerciseSet {
 				Points = pointsAndData.Points,
 				WeightData = new WeightSet {
