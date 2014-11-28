@@ -66,9 +66,16 @@ namespace Cassini.FitocracyAnalyzer.Core.Types
 
 		public IntensityKind? Intensity { get; set; }
 
+		public string Speed { get; set; }
+
+		public int? HeartRate { get; set; }
+
+		public string Resistance { get; set; }
+
 		public override string ToString ()
 		{
-			return string.Format ("[DistanceSet: Time={0}, Distance={1}, Intensity={2}]", Time, Distance, Intensity);
+			return string.Format ("[DistanceSet: Time={0}, Distance={1}, Intensity={2}, HeartRate={3}, Resistence={4}]",
+				Time, Distance, Intensity, HeartRate, Resistance);
 		}
 	}
 

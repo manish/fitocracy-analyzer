@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using OpenQA.Selenium;
 using Cassini.FitocracyAnalyzer.Core.Types;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace Cassini.FitocracyAnalyzer.Core
 {
@@ -14,12 +16,21 @@ namespace Cassini.FitocracyAnalyzer.Core
 			var sets = exercise.FindElements (By.XPath ("ul/li"));
 
 			switch (exerciseName) {
+
+			#region CARDIO, WARMUP, COOLDOWN
 			case "Hiking":
 				return GetExerciseData (sets, Exercises.Hiking, HikingParser);
 			case "Stretching":
 				return GetExerciseData (sets, Exercises.Stretching, TimeTakenParser);
 			case "Foam Rolling":
 				return GetExerciseData (sets, Exercises.FoamRolling, TimeTakenParser);
+			case "Rowing (machine)":
+				return GetExerciseData (sets, Exercises.Rowingmachine, CardioParser);
+			case "Elliptical Trainer":
+				return GetExerciseData (sets, Exercises.EllipticalTrainer, EllipticalParser);
+			case "Cycling (stationary)":
+				return GetExerciseData (sets, Exercises.Cyclingstationary, CardioParser);
+			#endregion
 
 			#region CHEST WORKOUTS
 			case "Push-Up":
@@ -118,6 +129,53 @@ namespace Cassini.FitocracyAnalyzer.Core
 			return null;
 		}
 
+		static ExerciseSet EllipticalParser (IWebElement set)
+		{
+			var pointsAndData = GetPointsAndRepData (set);
+			var distanceInfo = pointsAndData.RepData.Split (new [] {" | "}, StringSplitOptions.RemoveEmptyEntries);
+
+			var exerciseSet = new ExerciseSet {
+				Points = pointsAndData.Points,
+				DistanceData = new DistanceSet {
+					Time = TimeSpan.ParseExact (distanceInfo[0], "c", CultureInfo.CurrentCulture),
+				},
+				IsPr = pointsAndData.IsPr
+			};
+
+			var members = typeof(IntensityKind).GetMembers ();
+			foreach (var member in members) {
+				var descAttributes = member.GetCustomAttributes (typeof(DescriptionAttribute), false);
+				foreach (var descObj in descAttributes) {
+					var descAttr = (DescriptionAttribute)descObj;
+					if (string.Equals (descAttr.Description , distanceInfo[1].Trim ()))
+						exerciseSet.DistanceData.Intensity = (IntensityKind)Enum.Parse (typeof(IntensityKind), member.Name);
+				}
+			}
+
+			return exerciseSet;
+		}
+
+		static ExerciseSet CardioParser (IWebElement set)
+		{
+			var pointsAndData = GetPointsAndRepData (set);
+			var distanceInfo = pointsAndData.RepData.Split (new [] {" | "}, StringSplitOptions.RemoveEmptyEntries);
+
+			int? bpm = null;
+			if (distanceInfo.Length > 3)
+				bpm = int.Parse (distanceInfo [3].Replace ("BPM", string.Empty));
+			return new ExerciseSet {
+				Points = pointsAndData.Points,
+				DistanceData = new DistanceSet {
+					Time = TimeSpan.ParseExact (distanceInfo[0], "c", CultureInfo.CurrentCulture),
+					Distance = distanceInfo[1],
+					Speed = distanceInfo.Length > 2 ? distanceInfo[2] : null,
+					HeartRate = bpm,
+					Resistance = distanceInfo.Length > 4 ? distanceInfo[4] : null,
+				},
+				IsPr = pointsAndData.IsPr
+			};
+		}
+
 		static ExerciseSet WeightRepsParser (IWebElement set)
 		{
 			var pointsAndData = GetPointsAndRepData (set);
@@ -150,7 +208,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 			var pointsAndData = GetPointsAndRepData (set);
 			return new ExerciseSet {
 				Points = pointsAndData.Points,
-				TimeTaken = TimeSpan.ParseExact(pointsAndData.RepData, 
+				TimeTaken = TimeSpan.ParseExact (pointsAndData.RepData,
 					"c", CultureInfo.CurrentCulture),
 				IsPr = pointsAndData.IsPr
 			};
@@ -164,7 +222,7 @@ namespace Cassini.FitocracyAnalyzer.Core
 			return new ExerciseSet {
 				Points = pointsAndData.Points,
 				DistanceData = new DistanceSet {
-					Time = TimeSpan.ParseExact(hikeData [0], 
+					Time = TimeSpan.ParseExact (hikeData [0],
 						"c", CultureInfo.CurrentCulture),
 					Distance = hikeData [1]
 				},

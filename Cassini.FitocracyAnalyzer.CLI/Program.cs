@@ -81,8 +81,8 @@ namespace Cassini.FitocracyAnalyzer.CLI
 				Console.WriteLine ("DateTime: {0} | TotalPoints {1} | Name: {2} | Total exercises: {3}",
 					wo.DateTime, wo.TotalPoints, wo.WorkoutName, wo.Exercises.Count);
 			};
-			//var before = new DateTime (2014, 11, 25);
-			crawler.Crawl (DateTime.Now);
+			var before = DateTime.Now;
+			crawler.Crawl (before);
 		}
 
 		static void ShowError (string message = null)
