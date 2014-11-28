@@ -18,12 +18,16 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.Hiking, HikingParser);
 			case "Stretching":
 				return GetExerciseData (sets, Exercises.Stretching, TimeTakenParser);
+			case "Foam Rolling":
+				return GetExerciseData (sets, Exercises.FoamRolling, TimeTakenParser);
 
 			#region CHEST WORKOUTS
 			case "Push-Up":
 				return GetExerciseData (sets, Exercises.PushUp, RepsParser);
 			case "Barbell Bench Press":
 				return GetExerciseData (sets, Exercises.BarbellBenchPress, WeightRepsParser);
+			case "Barbell Incline Bench Press":
+				return GetExerciseData (sets, Exercises.BarbellInclineBenchPress, WeightRepsParser);
 			case "Dumbbell Bench Press":
 				return GetExerciseData (sets, Exercises.DumbbellBenchPress, WeightRepsParser);
 			case "Cable Crossover":
@@ -48,6 +52,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.HangingKneeRaise, RepsParser);
 			case "Weighted Decline Sit-Up":
 				return GetExerciseData (sets, Exercises.WeightedDeclineSitUp, WeightRepsParser);
+			case "Flat Straight Leg Raise":
+				return GetExerciseData (sets, Exercises.FlatStraightLegRaise, RepsParser);
 			#endregion
 
 			#region LEGS
@@ -63,6 +69,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.LyingLegCurls, WeightRepsParser);
 			case "Barbell Hip Thrust":
 				return GetExerciseData (sets, Exercises.BarbellHipThrust, WeightRepsParser);
+			case "Two-Arm Kettlebell Swing":
+				return GetExerciseData (sets, Exercises.TwoArmKettlebellSwing, WeightRepsParser);
 			case "Standing Barbell Calf Raise":
 				return GetExerciseData (sets, Exercises.StandingBarbellCalfRaise, WeightRepsParser);
 			case "Calf Press On The Leg Press Machine":
@@ -94,6 +102,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.HammerDumbbellCurl, WeightRepsParser);
 			case "Barbell Curl":
 				return GetExerciseData (sets, Exercises.BarbellCurl, WeightRepsParser);
+			case "EZ-Bar Curl":
+				return GetExerciseData (sets, Exercises.EZBarCurl, WeightRepsParser);
 			#endregion
 			}
 
@@ -180,7 +190,9 @@ namespace Cassini.FitocracyAnalyzer.Core
 
 		static double ParseWeight (string weightData)
 		{
-			return double.Parse (weightData.Replace ("lb", string.Empty));
+			var conversionFactor = weightData.Contains ("kg") ? 2.20462 : 1;
+			var weight = weightData.Replace ("lb", string.Empty).Replace ("kg", string.Empty);
+			return double.Parse (weight) * conversionFactor;
 		}
 
 		static RawRep GetPointsAndRepData (IWebElement set)
