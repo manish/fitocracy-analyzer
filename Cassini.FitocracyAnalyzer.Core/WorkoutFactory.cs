@@ -21,13 +21,17 @@ namespace Cassini.FitocracyAnalyzer.Core
 			case "Push-Up":
 				return GetExerciseData (sets, Exercises.PushUp, PushUpParser);
 			case "Barbell Bench Press":
-				return GetExerciseData (sets, Exercises.BarbellBenchPress, BarbellBenchPressParser);
+				return GetExerciseData (sets, Exercises.BarbellBenchPress, WeightRepsParser);
+			case "Dumbbell Bench Press":
+				return GetExerciseData (sets, Exercises.DumbbellBenchPress, WeightRepsParser);
+			case "Cable Crossover":
+				return GetExerciseData (sets, Exercises.CableCrossover, WeightRepsParser);
 			}
 
 			return null;
 		}
 
-		static ExerciseSet BarbellBenchPressParser (IWebElement set)
+		static ExerciseSet WeightRepsParser (IWebElement set)
 		{
 			var pointsAndData = GetPointsAndRepData (set);
 			var weightInfo = pointsAndData.RepData.Split (new [] {" x "}, StringSplitOptions.RemoveEmptyEntries);
