@@ -30,8 +30,12 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.BarbellInclineBenchPress, WeightRepsParser);
 			case "Dumbbell Bench Press":
 				return GetExerciseData (sets, Exercises.DumbbellBenchPress, WeightRepsParser);
+			case "Incline Dumbbell Bench Press":
+				return GetExerciseData (sets, Exercises.InclineDumbbellBenchPress, WeightRepsParser);
 			case "Cable Crossover":
 				return GetExerciseData (sets, Exercises.CableCrossover, WeightRepsParser);
+			case "Machine Chest Press":
+				return GetExerciseData (sets, Exercises.MachineChestPress, WeightRepsParser);
 			#endregion
 
 			#region TRICEPS WORKOUTS
@@ -82,6 +86,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.StandingBarbellShoulderPressOHP, WeightRepsParser);
 			case "Standing Dumbbell Shoulder Press":
 				return GetExerciseData (sets, Exercises.StandingDumbbellShoulderPress, WeightRepsParser);
+			case "Seated Dumbbell Shoulder Press":
+				return GetExerciseData (sets, Exercises.SeatedDumbbellShoulderPress, WeightRepsParser);
 			case "Dumbbell Side Lateral Raise":
 				return GetExerciseData (sets, Exercises.DumbbellSideLateralRaise, WeightRepsParser);
 			#endregion
@@ -93,6 +99,8 @@ namespace Cassini.FitocracyAnalyzer.Core
 				return GetExerciseData (sets, Exercises.TBarRow, WeightRepsParser);
 			case "Pendlay Row":
 				return GetExerciseData (sets, Exercises.PendlayRow, WeightRepsParser);
+			case "One-Arm Dumbbell Row":
+				return GetExerciseData (sets, Exercises.OneArmDumbbellRow, WeightRepsParser);
 			#endregion
 
 			#region BICEPS
